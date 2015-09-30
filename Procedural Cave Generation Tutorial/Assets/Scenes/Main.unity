@@ -96,6 +96,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 1409516459}
   - 114: {fileID: 1409516458}
+  - 114: {fileID: 1409516460}
+  - 33: {fileID: 1409516462}
+  - 23: {fileID: 1409516461}
   m_Layer: 0
   m_Name: Map Generator
   m_TagString: Untagged
@@ -131,6 +134,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!114 &1409516460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1409516457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e80070c66783cb0489b1153d15cbe571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!23 &1409516461
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1409516457}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_Materials:
+  - {fileID: 2100000, guid: 24e3e406b08b6d948ae91241f3f01a5c, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_ImportantGI: 0
+  m_AutoUVMaxDistance: .5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &1409516462
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1409516457}
+  m_Mesh: {fileID: 0}
 --- !u!1 &1838533447
 GameObject:
   m_ObjectHideFlags: 0
