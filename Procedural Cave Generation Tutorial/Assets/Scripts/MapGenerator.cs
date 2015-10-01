@@ -38,15 +38,33 @@ public class MapGenerator : MonoBehaviour
 			SmoothMap();
 		}
 
+		int borderSize = 1;
+		int[,] borderMap = new int[width + borderSize * 2, height + borderSize * 2];
+
+		for(int i = 0; i < borderMap.GetLength(0); i++)
+		{
+			for(int j = 0; j < borderMap.GetLength(1); j++)
+			{
+				if(i >= borderSize && i < width + borderSize && j >= borderSize && j < height + borderSize)
+				{
+					borderMap[i, j] = map[i - borderSize, j - borderSize];
+				}
+				else
+				{
+					borderMap[i, j] = 1;
+				}
+			}
+		}
+
 		MeshGenerator meshGen = GetComponent<MeshGenerator>();
-		meshGen.GenerateMesh(map, 1);
+		meshGen.GenerateMesh(borderMap, 1);
 	}
 
 	void RandomFillMap()
 	{
 		if(useRandomSeed)
 		{
-			seed = Time.time.ToString();
+			seed = DateTime.Now.ToString();
 		}
 
 		System.Random pseudoRandom = new System.Random(seed.GetHashCode());
