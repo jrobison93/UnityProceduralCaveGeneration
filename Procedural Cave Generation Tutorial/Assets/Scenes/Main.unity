@@ -120,7 +120,7 @@ MonoBehaviour:
   width: 128
   height: 70
   seed: 0
-  useRandomSeed: 0
+  useRandomSeed: 1
   randomFillPercent: 50
 --- !u!4 &1409516459
 Transform:
