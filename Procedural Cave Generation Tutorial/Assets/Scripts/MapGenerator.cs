@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class MapGenerator : MonoBehaviour 
@@ -38,6 +39,8 @@ public class MapGenerator : MonoBehaviour
 			SmoothMap();
 		}
 
+		ProcessMap();
+
 		int borderSize = 1;
 		int[,] borderMap = new int[width + borderSize * 2, height + borderSize * 2];
 
@@ -58,6 +61,103 @@ public class MapGenerator : MonoBehaviour
 
 		MeshGenerator meshGen = GetComponent<MeshGenerator>();
 		meshGen.GenerateMesh(borderMap, 1);
+	}
+
+	List<List<Coord>> GetRegions(int tileType)
+	{
+		List<List<Coord>> regions = new List<List<Coord>>();
+		int[,] mapFlags = new int[width, height];
+
+		for(int i = 0; i < width; i++)
+		{
+			for(int j = 0; j < height; j++)
+			{
+				if(mapFlags[i, j] == 0 && map[i, j] == tileType)
+				{
+					List<Coord> newRegion = GetRegionTiles(i, j);
+					regions.Add(newRegion);
+
+					foreach(Coord tile in newRegion)
+					{
+						mapFlags[tile.tileX, tile.tileY] = 1;
+					}
+				}
+			}
+		}
+
+		return regions;
+	}
+
+	void ProcessMap()
+	{
+		List<List<Coord>> wallRegions = GetRegions(1);
+
+		int wallThresholdSize = 100;
+
+		foreach(List<Coord> wallRegion in wallRegions)
+		{
+			if(wallRegion.Count < wallThresholdSize)
+			{
+				foreach(Coord tile in wallRegion)
+				{
+					map[tile.tileX, tile.tileY] = 0;
+				}
+			}
+		}
+
+		List<List<Coord>> roomRegions = GetRegions(1);
+		
+		int roomThresholdSize = 200;
+		
+		foreach(List<Coord> roomRegion in roomRegions)
+		{
+			if(roomRegion.Count < wallThresholdSize)
+			{
+				foreach(Coord tile in roomRegion)
+				{
+					map[tile.tileX, tile.tileY] = 1;
+				}
+			}
+		}
+	}
+
+	List<Coord> GetRegionTiles(int startX, int startY)
+	{
+		List<Coord> tiles = new List<Coord>();
+		int[,] mapFlags = new int[width, height];
+		int tileType = map[startX, startY];
+
+		Queue<Coord> queue = new Queue<Coord>();
+		queue.Enqueue(new Coord(startX, startY));
+		mapFlags[startX, startY] = 1;
+
+		while(queue.Count > 0) 
+		{
+			Coord tile = queue.Dequeue();
+			tiles.Add(tile);
+
+			for(int x = tile.tileX - 1; x <= tile.tileX + 1; x++)
+			{
+				for(int y = tile.tileY - 1; y <= tile.tileY + 1; y++)
+				{
+					if(IsInMapRange(x, y) && (y == tile.tileY || x == tile.tileX))
+					{
+						if(mapFlags[x, y] == 0 && map[x, y] == tileType)
+						{
+							mapFlags[x, y] = 1;
+							queue.Enqueue(new Coord(x, y));
+						}
+					}
+				}
+			}
+		}
+
+		return tiles;
+	}
+
+	bool IsInMapRange(int x, int y)
+	{
+		return x >= 0 && x < width && y >= 0 && y < height;
 	}
 
 	void RandomFillMap()
@@ -112,7 +212,7 @@ public class MapGenerator : MonoBehaviour
 		{
 			for(int j = y - 1; j <= y + 1; j++)
 			{
-				if(i >= 0 && i < width && j >= 0 && j < height)
+				if(IsInMapRange(i, j))
 				{
 					if(i != x || j != y)
 					{
@@ -129,20 +229,17 @@ public class MapGenerator : MonoBehaviour
 		return wallCount;
 	}
 
-	void OnDrawGizmos()
+
+	struct Coord
 	{
-//		if(map != null)
-//		{
-//			for(int i = 0; i < width; i++)
-//			{
-//				for(int j = 0; j < height; j++)
-//				{
-//					Gizmos.color = (map[i, j] == 1) ? Color.black : Color.white;
-//					Vector3 pos = new Vector3(-width / 2 + i + 0.5f, 0, -height / 2 + j + 0.5f);
-//					Gizmos.DrawCube(pos, Vector3.one);
-//				}
-//			}
-//		}
+		public int tileX;
+		public int tileY;
+
+		public Coord(int x, int y)
+		{
+			tileX = x;
+			tileY = y;
+		}
 	}
 
 

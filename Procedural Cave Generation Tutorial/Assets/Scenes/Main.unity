@@ -119,8 +119,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 128
   height: 70
-  seed: 
-  useRandomSeed: 1
+  seed: 0
+  useRandomSeed: 0
   randomFillPercent: 50
 --- !u!4 &1409516459
 Transform:
